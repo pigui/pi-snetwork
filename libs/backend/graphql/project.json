@@ -1,0 +1,48 @@
+{
+  "name": "graphql",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/graphql/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/graphql",
+        "tsConfig": "libs/backend/graphql/tsconfig.lib.json",
+        "packageJson": "libs/backend/graphql/package.json",
+        "main": "libs/backend/graphql/src/index.ts",
+        "assets": ["libs/backend/graphql/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs graphql {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/backend/graphql/**/*.ts",
+          "libs/backend/graphql/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend/graphql/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

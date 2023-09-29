@@ -1,0 +1,31 @@
+type User {
+  _id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+}
+
+input FindUserByIdInput {
+  _id: ID!
+}
+
+input FindUserByEmailInput {
+  email: String!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+}
+
+type Query {
+  findUsers: [User]
+  findUserById(findUserByIdInput: FindUserByIdInput!): User
+  findUserByEmail(findUserByEmailInput: FindUserByEmailInput!): User
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}

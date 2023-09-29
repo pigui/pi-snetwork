@@ -1,0 +1,48 @@
+{
+  "name": "cqrs",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/cqrs/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/cqrs",
+        "tsConfig": "libs/backend/cqrs/tsconfig.lib.json",
+        "packageJson": "libs/backend/cqrs/package.json",
+        "main": "libs/backend/cqrs/src/index.ts",
+        "assets": ["libs/backend/cqrs/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs cqrs {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/backend/cqrs/**/*.ts",
+          "libs/backend/cqrs/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend/cqrs/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

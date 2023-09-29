@@ -1,0 +1,64 @@
+{
+  "name": "api-gateway",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "backend/api-gateway/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/backend/api-gateway",
+        "main": "backend/api-gateway/src/main.ts",
+        "tsConfig": "backend/api-gateway/tsconfig.app.json",
+        "assets": ["backend/api-gateway/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "backend/api-gateway/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "api-gateway:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "api-gateway:build:development"
+        },
+        "production": {
+          "buildTarget": "api-gateway:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["backend/api-gateway/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "backend/api-gateway/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
