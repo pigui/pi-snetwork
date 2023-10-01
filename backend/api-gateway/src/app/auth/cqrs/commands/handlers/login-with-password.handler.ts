@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@backend/cqrs';
 import { LoginWithPasswordCommand } from '../impl';
-import { Inject } from '@nestjs/common';
+import { HttpException, Inject } from '@nestjs/common';
 import { AuthMS } from '@backend/microservices';
 import { ClientKafka } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -25,7 +25,7 @@ export class LoginWithPasswordHandler
       );
       return user;
     } catch (e) {
-      e;
+      throw new HttpException(e, e?.status || 500);
     }
   }
 }

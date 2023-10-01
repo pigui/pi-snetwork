@@ -1,6 +1,6 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@backend/cqrs';
 import { CreateUserCommand } from '../impl';
-import { Inject } from '@nestjs/common';
+import { HttpException, Inject } from '@nestjs/common';
 import { AuthMS } from '@backend/microservices';
 import { ClientKafka } from '@nestjs/microservices';
 import { User } from '../../../dto';
@@ -27,7 +27,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       this.eventBus.publish(new UserCreatedEvent(user));
       return user;
     } catch (e) {
-      e;
+      throw new HttpException(e, e?.status || 500);
     }
   }
 }

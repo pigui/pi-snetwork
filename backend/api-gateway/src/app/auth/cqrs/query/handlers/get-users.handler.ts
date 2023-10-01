@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@backend/cqrs';
 import { GetUsersQuery } from '../impl';
 import { ClientKafka } from '@nestjs/microservices';
-import { Inject } from '@nestjs/common';
+import { HttpException, Inject } from '@nestjs/common';
 import { AuthMS } from '@backend/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
     try {
       return lastValueFrom(this.client.send(AuthMS.FIND_MESSAGE, ''));
     } catch (e) {
-      e;
+      throw new HttpException(e, e?.status || 500);
     }
   }
 }
