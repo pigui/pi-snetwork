@@ -1,0 +1,48 @@
+{
+  "name": "hashing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/hashing/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/hashing",
+        "tsConfig": "libs/backend/hashing/tsconfig.lib.json",
+        "packageJson": "libs/backend/hashing/package.json",
+        "main": "libs/backend/hashing/src/index.ts",
+        "assets": ["libs/backend/hashing/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs hashing {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/backend/hashing/**/*.ts",
+          "libs/backend/hashing/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend/hashing/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

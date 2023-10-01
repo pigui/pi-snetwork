@@ -5,4 +5,6 @@ export class User implements GraphQLTypes.User {
   email: string;
   firstName: string;
   lastName: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

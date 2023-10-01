@@ -1,8 +1,12 @@
+scalar Date
+
 type User {
   _id: ID!
   email: String!
   firstName: String!
   lastName: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 input FindUserByIdInput {
@@ -20,6 +24,17 @@ input CreateUserInput {
   password: String!
 }
 
+input LoginWithPasswordInput {
+  email: String!
+  password: String!
+}
+
+type AccessToken {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
 type Query {
   findUsers: [User]
   findUserById(findUserByIdInput: FindUserByIdInput!): User
@@ -28,4 +43,7 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  loginWithPassword(
+    loginWithPasswordInput: LoginWithPasswordInput
+  ): AccessToken!
 }

@@ -5,7 +5,11 @@ import {
   GetUserByIdQuery,
   GetUsersQuery,
 } from './cqrs/query/impl';
-import { User } from './dto';
+import { CreateUserInput, LoginWithPasswordInput, User } from './dto';
+import {
+  CreateUserCommand,
+  LoginWithPasswordCommand,
+} from './cqrs/commands/impl';
 
 @Injectable()
 export class AuthService {
@@ -24,5 +28,17 @@ export class AuthService {
 
   findUserByEmail(email: string): Promise<User> {
     return this.queryBus.execute<User>(new GetUserByEmailQuery(email));
+  }
+
+  createUser(createUserInput: CreateUserInput): Promise<User> {
+    return this.commandBus.execute<User>(
+      new CreateUserCommand(createUserInput)
+    );
+  }
+
+  loginWithPassword(loginWithPasswordInput: LoginWithPasswordInput) {
+    return this.commandBus.execute(
+      new LoginWithPasswordCommand(loginWithPasswordInput)
+    );
   }
 }

@@ -23,11 +23,24 @@ export interface CreateUserInput {
     password: string;
 }
 
+export interface LoginWithPasswordInput {
+    email: string;
+    password: string;
+}
+
 export interface User {
     _id: string;
     email: string;
     firstName: string;
     lastName: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface AccessToken {
+    accessToken: string;
+    refreshToken: string;
+    user: User;
 }
 
 export interface IQuery {
@@ -38,6 +51,7 @@ export interface IQuery {
 
 export interface IMutation {
     createUser(createUserInput: CreateUserInput): User | Promise<User>;
+    loginWithPassword(loginWithPasswordInput?: Nullable<LoginWithPasswordInput>): AccessToken | Promise<AccessToken>;
 }
 
 type Nullable<T> = T | null;

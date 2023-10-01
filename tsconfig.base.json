@@ -15,8 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backend/config": ["libs/backend/config/src/index.ts"],
       "@backend/cqrs": ["libs/backend/cqrs/src/index.ts"],
-      "@backend/graphql": ["libs/backend/graphql/src/index.ts"]
+      "@backend/database": ["libs/backend/database/src/index.ts"],
+      "@backend/graphql": ["libs/backend/graphql/src/index.ts"],
+      "@backend/hashing": ["libs/backend/hashing/src/index.ts"],
+      "@backend/microservices": ["libs/backend/microservices/src/index.ts"],
+      "@backend/redis": ["libs/backend/redis/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

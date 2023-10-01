@@ -7,14 +7,17 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CqrsModule } from '@backend/cqrs';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
+import { ConfigModule } from '@backend/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     CqrsModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
+      installSubscriptionHandlers: true,
       definitions: {
         path: join(process.cwd(), 'libs/backend/graphql/src/lib/graphql.ts'),
         outputAs: 'interface',
@@ -26,7 +29,7 @@ import { APP_GUARD } from '@nestjs/core';
   providers: [
     AppService,
     {
-      provide: APP_GUARD,
+      provide: APP_PIPE,
       useValue: new ValidationPipe({ transform: true }),
     },
   ],
