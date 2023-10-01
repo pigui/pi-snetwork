@@ -1,0 +1,14 @@
+mutation LoginWithPassword($loginWithPasswordInput: LoginWithPasswordInput) {
+  loginWithPassword(loginWithPasswordInput: $loginWithPasswordInput) {
+    accessToken
+    refreshToken
+    user {
+      _id
+      email
+      firstName
+      lastName
+      createdAt
+      updatedAt
+    }
+  }
+}
