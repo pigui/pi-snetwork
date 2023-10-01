@@ -22,7 +22,9 @@
       "@backend/hashing": ["libs/backend/hashing/src/index.ts"],
       "@backend/microservices": ["libs/backend/microservices/src/index.ts"],
       "@backend/redis": ["libs/backend/redis/src/index.ts"],
-      "@frontend/graphql": ["libs/frontend/graphql/src/index.ts"]
+      "@frontend/graphql": ["libs/frontend/graphql/src/index.ts"],
+      "@frontend/services": ["libs/frontend/services/src/index.ts"],
+      "@frontend/ui": ["libs/frontend/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
