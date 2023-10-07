@@ -15,15 +15,22 @@ import { HttpLink } from 'apollo-angular/http';
 import { split } from '@apollo/client/core';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { provideStore } from '@ngrx/store';
-import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AuthEffects, authFeature } from '@frontend/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideStoreDevtools({ logOnly: !isDevMode() }),
-    provideEffects(),
-    provideStore(),
+    importProvidersFrom(
+      StoreModule.forRoot(),
+      EffectsModule.forRoot(),
+      StoreDevtoolsModule.instrument({
+        logOnly: !isDevMode(),
+      }),
+      StoreModule.forFeature(authFeature),
+      EffectsModule.forFeature(AuthEffects)
+    ),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(),
     importProvidersFrom(ApolloModule),

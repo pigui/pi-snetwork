@@ -10,6 +10,7 @@ const config: CodegenConfig = {
         'typescript-operations',
         'typescript-apollo-angular',
       ],
+      overwrite: true,
       config: {
         scalars: {
           Date: 'Date',
