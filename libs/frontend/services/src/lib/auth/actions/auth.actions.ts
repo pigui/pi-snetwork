@@ -1,10 +1,21 @@
+import {
+  CreateUserInput,
+  CreateUserMutation,
+  LoginWithPasswordInput,
+  LoginWithPasswordMutation,
+} from '@frontend/graphql';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const AuthActions = createActionGroup({
   source: 'Auth',
   events: {
-    'Load Auths': emptyProps(),
-    
-    
-  }
+    'Login With Password': props<{ request: LoginWithPasswordInput }>(),
+    'Login With Password Success': props<{
+      response: LoginWithPasswordMutation;
+    }>(),
+    'Login With Password Fail': emptyProps(),
+    Register: props<{ request: CreateUserInput }>(),
+    'Register Success': props<{ response: CreateUserMutation }>(),
+    'Register Fail': emptyProps(),
+  },
 });

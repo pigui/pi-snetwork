@@ -1,9 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { UserCreatedEvent } from '../impl';
+import { PubSub } from 'graphql-subscriptions';
 
 @EventsHandler(UserCreatedEvent)
 export class UserCreatedHandler implements IEventHandler<UserCreatedEvent> {
-  handle(event: UserCreatedEvent) {
-    throw new Error('Method not implemented.');
+  constructor(private readonly pubSub: PubSub) {}
+  handle({ payload }: UserCreatedEvent) {
+    this.pubSub.publish('userCreated', { userCreated: payload });
   }
 }

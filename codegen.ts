@@ -10,11 +10,15 @@ const config: CodegenConfig = {
         'typescript-operations',
         'typescript-apollo-angular',
       ],
-      overwrite: true,
       config: {
+        addExplicitOverride: true,
+        apolloAngularVersion: 5,
+        serviceProvidedInRoot: false,
         scalars: {
           Date: 'Date',
         },
+        sdkClass: true,
+        constEnums: true,
       },
     },
   },

@@ -3,16 +3,16 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ versionKey: false })
 export class UserDocument extends AbstractDoument {
-  @Prop({ unique: true, lowercase: true })
+  @Prop({ unique: true, lowercase: true, trim: true })
   email: string;
 
-  @Prop()
+  @Prop({ trim: true })
   firstName: string;
 
-  @Prop()
+  @Prop({ trim: true })
   lastName: string;
 
-  @Prop()
+  @Prop({ trim: true })
   password: string;
 
   @Prop()

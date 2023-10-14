@@ -12,11 +12,13 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@typescript-eslint/no-explicit-any": ["off"],
+        "@typescript-eslint/no-empty-function": ["off"],
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "piSnetwork",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -24,7 +26,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "pi-snetwork",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]

@@ -1,6 +1,7 @@
-import { gql } from 'apollo-angular';
+import gql from 'graphql-tag';
 import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
+import * as ApolloCore from '@apollo/client/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -89,14 +90,21 @@ export type User = {
 };
 
 export type LoginWithPasswordMutationVariables = Exact<{
-  loginWithPasswordInput?: InputMaybe<LoginWithPasswordInput>;
+  loginWithPasswordInput: LoginWithPasswordInput;
 }>;
 
 
 export type LoginWithPasswordMutation = { __typename?: 'Mutation', loginWithPassword: { __typename?: 'AccessToken', accessToken: string, refreshToken: string, user: { __typename?: 'User', _id: string, email: string, firstName: string, lastName: string, createdAt: Date, updatedAt: Date } } };
 
+export type CreateUserMutationVariables = Exact<{
+  createUserInput: CreateUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', _id: string, email: string, firstName: string, lastName: string, createdAt: Date, updatedAt: Date } };
+
 export const LoginWithPasswordDocument = gql`
-    mutation LoginWithPassword($loginWithPasswordInput: LoginWithPasswordInput) {
+    mutation LoginWithPassword($loginWithPasswordInput: LoginWithPasswordInput!) {
   loginWithPassword(loginWithPasswordInput: $loginWithPasswordInput) {
     accessToken
     refreshToken
@@ -116,9 +124,52 @@ export const LoginWithPasswordDocument = gql`
     providedIn: 'root'
   })
   export class LoginWithPasswordGQL extends Apollo.Mutation<LoginWithPasswordMutation, LoginWithPasswordMutationVariables> {
-    document = LoginWithPasswordDocument;
+    override document = LoginWithPasswordDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
+    }
+  }
+export const CreateUserDocument = gql`
+    mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    _id
+    email
+    firstName
+    lastName
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateUserGQL extends Apollo.Mutation<CreateUserMutation, CreateUserMutationVariables> {
+    override document = CreateUserDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+
+  type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+  interface MutationOptionsAlone<T, V> extends Omit<ApolloCore.MutationOptions<T, V>, 'mutation' | 'variables'> {}
+
+  @Injectable()
+  export class ApolloAngularSDK {
+    constructor(
+      private loginWithPasswordGql: LoginWithPasswordGQL,
+      private createUserGql: CreateUserGQL
+    ) {}
+      
+    loginWithPassword(variables: LoginWithPasswordMutationVariables, options?: MutationOptionsAlone<LoginWithPasswordMutation, LoginWithPasswordMutationVariables>) {
+      return this.loginWithPasswordGql.mutate(variables, options)
+    }
+    
+    createUser(variables: CreateUserMutationVariables, options?: MutationOptionsAlone<CreateUserMutation, CreateUserMutationVariables>) {
+      return this.createUserGql.mutate(variables, options)
     }
   }

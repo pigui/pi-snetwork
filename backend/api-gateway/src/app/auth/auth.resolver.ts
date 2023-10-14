@@ -1,14 +1,18 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import {
   CreateUserInput,
   FindUserByIdInput,
   LoginWithPasswordInput,
 } from './dto';
+import { PubSub } from 'graphql-subscriptions';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly pubSub: PubSub
+  ) {}
 
   @Query()
   findUsers() {
@@ -30,5 +34,10 @@ export class AuthResolver {
     loginWithPasswordInput: LoginWithPasswordInput
   ) {
     return this.authService.loginWithPassword(loginWithPasswordInput);
+  }
+
+  @Subscription()
+  userCreated() {
+    return this.pubSub.asyncIterator('userCreated');
   }
 }

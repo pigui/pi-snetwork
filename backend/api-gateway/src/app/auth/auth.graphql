@@ -47,3 +47,7 @@ type Mutation {
     loginWithPasswordInput: LoginWithPasswordInput
   ): AccessToken!
 }
+
+type Subscription {
+  userCreated: User!
+}

@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.input {
+  @apply w-full;
+  &__wrapper {
+    input {
+      @apply rounded-xl text-sm border-cyan-600 text-cyan-600  h-full min-w-full border-l-8 border-r-8 border-t-2 border-b-2
+      focus:border-8 focus:border-cyan-900 focus:border-t-4 focus:outline-0 focus:text-cyan-900 focus:text-xs p-4;
+    }
+    label {
+      @apply text-sm text-cyan-900 focus:text-red-500;
+    }
+  }
+}

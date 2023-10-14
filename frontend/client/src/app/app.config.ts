@@ -10,18 +10,18 @@ import {
 import { appRoutes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
-import { split } from '@apollo/client/core';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { ApolloModule } from 'apollo-angular';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AuthEffects, authFeature } from '@frontend/services';
+import { AuthEffects, AuthFacade, authFeature } from '@frontend/services';
+import { ApolloAngularSDK } from '@frontend/graphql';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
+    provideHttpClient(),
+    importProvidersFrom(ApolloModule),
     importProvidersFrom(
       StoreModule.forRoot(),
       EffectsModule.forRoot(),
@@ -31,39 +31,7 @@ export const appConfig: ApplicationConfig = {
       StoreModule.forFeature(authFeature),
       EffectsModule.forFeature(AuthEffects)
     ),
-    provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(),
-    importProvidersFrom(ApolloModule),
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory(httpLink: HttpLink) {
-        const http = httpLink.create({
-          uri: 'http://localhost:3000/graphql',
-        });
-
-        const ws = new WebSocketLink({
-          uri: 'ws://localhost:3000/graphql',
-          options: {
-            reconnect: true,
-          },
-        });
-        const link = split(
-          ({ query }) => {
-            const { kind, operation } = getMainDefinition(query) as any;
-            return (
-              kind === 'OperationDefinition' && operation === 'subscription'
-            );
-          },
-          ws,
-          http
-        );
-
-        return {
-          link,
-          // ... options
-        };
-      },
-      deps: [HttpLink],
-    },
+    ApolloAngularSDK,
+    AuthFacade,
   ],
 };

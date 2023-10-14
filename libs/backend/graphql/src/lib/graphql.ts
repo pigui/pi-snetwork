@@ -54,4 +54,8 @@ export interface IMutation {
     loginWithPassword(loginWithPasswordInput?: Nullable<LoginWithPasswordInput>): AccessToken | Promise<AccessToken>;
 }
 
+export interface ISubscription {
+    userCreated(): User | Promise<User>;
+}
+
 type Nullable<T> = T | null;

@@ -4,6 +4,7 @@ import { UserDocument } from './models';
 import { CreateUserDto } from './dto';
 import { HashingService } from '@backend/hashing';
 import { RpcException } from '@nestjs/microservices';
+import { titleCase } from 'text-case';
 
 @Injectable()
 export class UsersService {
@@ -47,6 +48,8 @@ export class UsersService {
       }
       return await this.usersRepository.create({
         ...createUserDto,
+        firstName: titleCase(createUserDto.firstName),
+        lastName: titleCase(createUserDto.lastName),
         password: await this.hashingService.hash(createUserDto.password),
         createdAt: new Date(),
         updatedAt: new Date(),

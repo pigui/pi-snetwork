@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-field {
+  @apply min-h-[6rem] max-h-[6rem];
+  &__wrapper {
+    @apply pl-2 pr-2 w-full h-full flex items-end;
+  }
+}

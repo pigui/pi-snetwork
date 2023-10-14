@@ -1,0 +1,8 @@
+<div class="input__wrapper">
+  <label [for]=" id">
+    {{ label }}
+  </label>
+  <input [id]="id" [type]="type" [placeholder]="placeholder" [(ngModel)]="value" (ngModelChange)="onInputChange()"
+    [ngModelOptions]="{standalone: true}">
+
+</div>

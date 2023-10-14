@@ -1,5 +1,5 @@
 import { GraphQLTypes } from '@backend/graphql';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsAlpha, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserInput implements GraphQLTypes.CreateUserInput {
   @IsNotEmpty()
@@ -8,10 +8,12 @@ export class CreateUserInput implements GraphQLTypes.CreateUserInput {
 
   @IsNotEmpty()
   @IsString()
+  @IsAlpha()
   firstName: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsAlpha()
   lastName: string;
 
   @IsNotEmpty()

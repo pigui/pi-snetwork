@@ -1,0 +1,21 @@
+<app-form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-row>
+    <app-form-field>
+      <app-input [label]="'firstName'" formControlName="firstName"></app-input>
+    </app-form-field>
+    <app-form-field>
+      <app-input [label]="'lastName'" formControlName="lastName"></app-input>
+    </app-form-field>
+    <app-form-field>
+      <app-input [label]="'email'" formControlName="email"></app-input>
+    </app-form-field>
+    <app-form-field>
+      <app-input [label]="'password'" [type]="'password'" formControlName="password"></app-input>
+    </app-form-field>
+    <app-form-field>
+      <app-button [type]="'submit'">
+        Submit
+      </app-button>
+    </app-form-field>
+  </app-row>
+</app-form>
