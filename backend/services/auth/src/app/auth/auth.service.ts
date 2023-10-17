@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginWithPasswordDto } from './dto';
+import { LoginWithPasswordDto, RefreshTokensDto } from './dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -14,8 +14,10 @@ import jwtConfig from './config/jwt.config';
 import { HashingService } from '@backend/hashing';
 import { v4 as uuidv4 } from 'uuid';
 import { ActiveUserData } from './interfaces';
-
-import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import {
+  InvalidatedRefreshTokenError,
+  RefreshTokenIdsStorage,
+} from './refresh-token-ids.storage';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,11 @@ export class AuthService {
     private readonly hashingService: HashingService,
     private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage
   ) {}
-  async loginWithPassword(loginWithPasswordDto: LoginWithPasswordDto) {
+  async loginWithPassword(loginWithPasswordDto: LoginWithPasswordDto): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: UserDocument;
+  }> {
     try {
       const findUser: UserDocument = await this.usersService.findOnebyEmail(
         loginWithPasswordDto.email
@@ -48,6 +54,45 @@ export class AuthService {
       return await { ...(await this.generateTokens(findUser)), user: findUser };
     } catch (e) {
       throw new RpcException(e);
+    }
+  }
+
+  async refreshTokens({ refreshToken }: RefreshTokensDto): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: UserDocument;
+  }> {
+    try {
+      const { sub, refreshTokenId } = await this.jwtService.verifyAsync<
+        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
+      >(refreshToken, {
+        secret: this.jwtConfiguration.secret,
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+      });
+      const user = await this.usersService.findOneById(sub);
+
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      const isValid = await this.refreshTokenIdsStorage.validate(
+        user._id.toString(),
+        refreshTokenId
+      );
+
+      if (isValid) {
+        this.refreshTokenIdsStorage.invalidate(user._id.toString());
+      } else {
+        throw new Error('Refresh token is invalid');
+      }
+
+      return await { ...(await this.generateTokens(user)), user };
+    } catch (e) {
+      if (e instanceof InvalidatedRefreshTokenError) {
+        throw new RpcException(new UnauthorizedException('Access denied'));
+      }
+      throw new RpcException(new UnauthorizedException());
     }
   }
 
@@ -96,5 +141,19 @@ export class AuthService {
         expiresIn,
       }
     );
+  }
+
+  async verifyToken(accessToken: string): Promise<ActiveUserData> {
+    try {
+      const payload: ActiveUserData =
+        await this.jwtService.verifyAsync<ActiveUserData>(
+          accessToken,
+          this.jwtConfiguration
+        );
+
+      return payload;
+    } catch (e) {
+      throw new RpcException(new UnauthorizedException());
+    }
   }
 }

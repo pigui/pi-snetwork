@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { EVENT_HANDLERS } from './cqrs/events/handlers';
 import { PubSub } from 'graphql-subscriptions';
 import { SAGAS } from './cqrs/sagas';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './guards/access-token.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -38,6 +41,11 @@ import { SAGAS } from './cqrs/sagas';
       provide: PubSub,
       useValue: new PubSub(),
     },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    AccessTokenGuard,
   ],
 })
 export class AuthModule {}

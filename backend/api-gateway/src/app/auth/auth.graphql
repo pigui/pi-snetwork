@@ -35,6 +35,10 @@ type AccessToken {
   user: User!
 }
 
+input RefreshTokensInput {
+  refreshToken: String!
+}
+
 type Query {
   findUsers: [User]
   findUserById(findUserByIdInput: FindUserByIdInput!): User
@@ -44,8 +48,9 @@ type Query {
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   loginWithPassword(
-    loginWithPasswordInput: LoginWithPasswordInput
+    loginWithPasswordInput: LoginWithPasswordInput!
   ): AccessToken!
+  refreshTokens(refreshTokensInput: RefreshTokensInput!): AccessToken!
 }
 
 type Subscription {

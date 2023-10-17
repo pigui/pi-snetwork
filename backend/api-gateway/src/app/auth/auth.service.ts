@@ -5,10 +5,17 @@ import {
   GetUserByIdQuery,
   GetUsersQuery,
 } from './cqrs/query/impl';
-import { CreateUserInput, LoginWithPasswordInput, User } from './dto';
+import {
+  AccessToken,
+  CreateUserInput,
+  LoginWithPasswordInput,
+  RefreshTokensInput,
+  User,
+} from './dto';
 import {
   CreateUserCommand,
   LoginWithPasswordCommand,
+  RefreshTokensCommand,
 } from './cqrs/commands/impl';
 
 @Injectable()
@@ -36,9 +43,17 @@ export class AuthService {
     );
   }
 
-  loginWithPassword(loginWithPasswordInput: LoginWithPasswordInput) {
+  loginWithPassword(
+    loginWithPasswordInput: LoginWithPasswordInput
+  ): Promise<AccessToken> {
     return this.commandBus.execute(
       new LoginWithPasswordCommand(loginWithPasswordInput)
+    );
+  }
+
+  refreshTokens(refreshTokensInput: RefreshTokensInput): Promise<AccessToken> {
+    return this.commandBus.execute(
+      new RefreshTokensCommand(refreshTokensInput)
     );
   }
 }

@@ -28,6 +28,10 @@ export interface LoginWithPasswordInput {
     password: string;
 }
 
+export interface RefreshTokensInput {
+    refreshToken: string;
+}
+
 export interface User {
     _id: string;
     email: string;
@@ -51,7 +55,8 @@ export interface IQuery {
 
 export interface IMutation {
     createUser(createUserInput: CreateUserInput): User | Promise<User>;
-    loginWithPassword(loginWithPasswordInput?: Nullable<LoginWithPasswordInput>): AccessToken | Promise<AccessToken>;
+    loginWithPassword(loginWithPasswordInput: LoginWithPasswordInput): AccessToken | Promise<AccessToken>;
+    refreshTokens(refreshTokensInput: RefreshTokensInput): AccessToken | Promise<AccessToken>;
 }
 
 export interface ISubscription {
