@@ -23,6 +23,7 @@ import {
 } from '@frontend/ui';
 import { AuthFacade } from '@frontend/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -45,6 +46,7 @@ export class LoginView implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
   private readonly authFacade: AuthFacade = inject(AuthFacade);
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly router: Router = inject(Router);
   readonly form: FormGroup<LoginForm> = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -56,8 +58,13 @@ export class LoginView implements OnInit {
       .subscribe({
         next: () => {
           // REDIRECT
+          this.router.navigate(['home']);
         },
       });
+  }
+
+  goRegister(): void {
+    this.router.navigate(['register']);
   }
 
   onSubmit(): void {

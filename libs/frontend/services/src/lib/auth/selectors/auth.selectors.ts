@@ -6,3 +6,13 @@ export const selectAuthState = createFeatureSelector<fromAuth.AuthState>(
 );
 
 export const getUser = createSelector(selectAuthState, (state) => state.user);
+
+export const getAccessToken = createSelector(
+  selectAuthState,
+  (state) => state.accessToken
+);
+
+export const getRefreshToken = createSelector(
+  selectAuthState,
+  (state) => state.refreshToken
+);

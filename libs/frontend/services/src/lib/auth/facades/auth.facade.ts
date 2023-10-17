@@ -30,6 +30,22 @@ export class AuthFacade {
     map((action) => !!action)
   );
 
+  readonly accessToken$: Observable<string | null> = this.store.pipe(
+    select(fromSelectors.getAccessToken)
+  );
+
+  readonly accessToken: Signal<string | null> = this.store.selectSignal(
+    fromSelectors.getAccessToken
+  );
+
+  readonly refreshToken$: Observable<string | null> = this.store.pipe(
+    select(fromSelectors.getRefreshToken)
+  );
+
+  readonly refreshToken: Signal<string | null> = this.store.selectSignal(
+    fromSelectors.getRefreshToken
+  );
+
   loginWithPassword(loginWithPasswordInput: LoginWithPasswordInput): void {
     this.store.dispatch(
       fromActions.AuthActions.loginWithPassword({

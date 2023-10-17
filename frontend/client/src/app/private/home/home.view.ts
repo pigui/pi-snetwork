@@ -4,15 +4,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-private',
+  selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './private.view.html',
-  styleUrls: ['./private.view.scss'],
+  imports: [CommonModule],
+  templateUrl: './home.view.html',
+  styleUrls: ['./home.view.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PrivateView {}
+export class HomeView {}

@@ -4,8 +4,13 @@ import {
   HostBinding,
   Input,
   ViewEncapsulation,
+  WritableSignal,
+  effect,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+type ButtonSeverity = 'primary' | 'secondary' | 'success' | 'danger';
 
 @Component({
   selector: 'app-button',
@@ -18,5 +23,9 @@ import { CommonModule } from '@angular/common';
 })
 export class ButtonComponent {
   @Input() type = 'button';
+  @Input() loading = false;
+  @Input() disabled = false;
+  @Input({ required: false }) severity: ButtonSeverity = 'primary';
+
   @HostBinding('class') className = 'button';
 }

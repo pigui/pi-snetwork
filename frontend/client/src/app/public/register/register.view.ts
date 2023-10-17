@@ -23,6 +23,7 @@ import {
   RowComponent,
 } from '@frontend/ui';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -45,6 +46,7 @@ export class RegisterView implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder);
   private readonly authFacade: AuthFacade = inject(AuthFacade);
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly router: Router = inject(Router);
   readonly form: FormGroup<RegisterForm> = this.fb.group({
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
@@ -58,8 +60,13 @@ export class RegisterView implements OnInit {
       .subscribe({
         next: () => {
           // REDIRECT
+          this.router.navigate(['home']);
         },
       });
+  }
+
+  goLogin(): void {
+    this.router.navigate(['login']);
   }
 
   onSubmit(): void {

@@ -9,6 +9,17 @@
     button {
       @apply rounded-xl text-sm bg-cyan-600 text-white border-cyan-900 h-full min-w-full border-l-8 border-r-8 border-t-2 border-b-2
         focus:border-8 focus:border-cyan-900 focus:border-t-4 focus:outline-0 focus:text-cyan-900 focus:text-xs p-4;
+
+      &.primary {
+        @apply text-sm bg-cyan-600 text-white border-cyan-900;
+      }
+      &.secondary {
+        @apply bg-white text-cyan-600 border-cyan-900;
+      }
+    }
+
+    button .secondary {
+      @apply bg-white text-cyan-600 border-cyan-900;
     }
   }
 }
