@@ -10,9 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { EVENT_HANDLERS } from './cqrs/events/handlers';
 import { PubSub } from 'graphql-subscriptions';
 import { SAGAS } from './cqrs/sagas';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { HttpExceptionFilter } from './exceptions';
 
 @Module({
   imports: [
@@ -44,6 +45,10 @@ import { AuthGuard } from './guards/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
     AccessTokenGuard,
   ],

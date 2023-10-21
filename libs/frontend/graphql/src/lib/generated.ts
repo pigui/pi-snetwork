@@ -50,6 +50,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   loginWithPassword: AccessToken;
+  refreshTokens: AccessToken;
 };
 
 
@@ -59,11 +60,17 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationLoginWithPasswordArgs = {
-  loginWithPasswordInput?: InputMaybe<LoginWithPasswordInput>;
+  loginWithPasswordInput: LoginWithPasswordInput;
+};
+
+
+export type MutationRefreshTokensArgs = {
+  refreshTokensInput: RefreshTokensInput;
 };
 
 export type Query = {
   __typename?: 'Query';
+  currentUser: User;
   findUserByEmail?: Maybe<User>;
   findUserById?: Maybe<User>;
   findUsers?: Maybe<Array<Maybe<User>>>;
@@ -77,6 +84,15 @@ export type QueryFindUserByEmailArgs = {
 
 export type QueryFindUserByIdArgs = {
   findUserByIdInput: FindUserByIdInput;
+};
+
+export type RefreshTokensInput = {
+  refreshToken: Scalars['String']['input'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  userCreated: User;
 };
 
 export type User = {
@@ -102,6 +118,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', _id: string, email: string, firstName: string, lastName: string, createdAt: Date, updatedAt: Date } };
+
+export type RefreshTokenMutationVariables = Exact<{
+  refreshTokensInput: RefreshTokensInput;
+}>;
+
+
+export type RefreshTokenMutation = { __typename?: 'Mutation', refreshTokens: { __typename?: 'AccessToken', accessToken: string, refreshToken: string, user: { __typename?: 'User', _id: string, email: string, firstName: string, lastName: string, createdAt: Date, updatedAt: Date } } };
 
 export const LoginWithPasswordDocument = gql`
     mutation LoginWithPassword($loginWithPasswordInput: LoginWithPasswordInput!) {
@@ -153,6 +176,33 @@ export const CreateUserDocument = gql`
       super(apollo);
     }
   }
+export const RefreshTokenDocument = gql`
+    mutation RefreshToken($refreshTokensInput: RefreshTokensInput!) {
+  refreshTokens(refreshTokensInput: $refreshTokensInput) {
+    accessToken
+    refreshToken
+    user {
+      _id
+      email
+      firstName
+      lastName
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RefreshTokenGQL extends Apollo.Mutation<RefreshTokenMutation, RefreshTokenMutationVariables> {
+    override document = RefreshTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 
   type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -162,7 +212,8 @@ export const CreateUserDocument = gql`
   export class ApolloAngularSDK {
     constructor(
       private loginWithPasswordGql: LoginWithPasswordGQL,
-      private createUserGql: CreateUserGQL
+      private createUserGql: CreateUserGQL,
+      private refreshTokenGql: RefreshTokenGQL
     ) {}
       
     loginWithPassword(variables: LoginWithPasswordMutationVariables, options?: MutationOptionsAlone<LoginWithPasswordMutation, LoginWithPasswordMutationVariables>) {
@@ -171,5 +222,9 @@ export const CreateUserDocument = gql`
     
     createUser(variables: CreateUserMutationVariables, options?: MutationOptionsAlone<CreateUserMutation, CreateUserMutationVariables>) {
       return this.createUserGql.mutate(variables, options)
+    }
+    
+    refreshToken(variables: RefreshTokenMutationVariables, options?: MutationOptionsAlone<RefreshTokenMutation, RefreshTokenMutationVariables>) {
+      return this.refreshTokenGql.mutate(variables, options)
     }
   }

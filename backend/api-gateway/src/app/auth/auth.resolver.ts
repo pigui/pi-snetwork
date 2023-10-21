@@ -5,9 +5,10 @@ import {
   FindUserByIdInput,
   LoginWithPasswordInput,
   RefreshTokensInput,
+  User,
 } from './dto';
 import { PubSub } from 'graphql-subscriptions';
-import { Auth } from './decorators';
+import { ActiveUser, Auth } from './decorators';
 import { AuthType } from './enums';
 
 @Resolver()
@@ -27,6 +28,11 @@ export class AuthResolver {
     return this.authService.findUserById(_id);
   }
 
+  @Query()
+  currentUser(@ActiveUser() user: User) {
+    return user;
+  }
+
   @Auth(AuthType.None)
   @Mutation()
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -42,6 +48,7 @@ export class AuthResolver {
     return this.authService.loginWithPassword(loginWithPasswordInput);
   }
 
+  @Auth(AuthType.None)
   @Mutation()
   refreshTokens(
     @Args('refreshTokensInput') refreshTokensInput: RefreshTokensInput

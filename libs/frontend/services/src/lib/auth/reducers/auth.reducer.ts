@@ -32,9 +32,29 @@ export const reducer = createReducer(
   on(AuthActions.loginWithPasswordFail, (state) => {
     return { ...state, user: null, accessToken: null, refreshToken: null };
   }),
-  on(AuthActions.register, () => initialState),
-  on(AuthActions.registerSuccess, () => initialState),
-  on(AuthActions.registerFail, () => initialState)
+  on(AuthActions.register, () => {
+    return initialState;
+  }),
+  on(AuthActions.registerSuccess, () => {
+    return initialState;
+  }),
+  on(AuthActions.registerFail, () => {
+    return initialState;
+  }),
+  on(AuthActions.refreshTokens, (state) => {
+    return state;
+  }),
+  on(AuthActions.refreshTokensSuccess, (state, action) => {
+    return {
+      ...state,
+      user: action?.response?.refreshTokens?.user,
+      refreshToken: action?.response?.refreshTokens?.refreshToken,
+      accessToken: action?.response?.refreshTokens?.accessToken,
+    };
+  }),
+  on(AuthActions.refreshTokensFail, () => {
+    return initialState;
+  })
 );
 
 export const authFeature = createFeature({

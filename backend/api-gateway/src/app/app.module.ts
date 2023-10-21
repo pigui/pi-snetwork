@@ -9,6 +9,7 @@ import { join } from 'path';
 import { CqrsModule } from '@backend/cqrs';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@backend/config';
+import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
@@ -21,6 +22,12 @@ import { ConfigModule } from '@backend/config';
       definitions: {
         path: join(process.cwd(), 'libs/backend/graphql/src/lib/graphql.ts'),
         outputAs: 'interface',
+      },
+      formatError: (error: GraphQLError) => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          ...error,
+        };
+        return graphQLFormattedError;
       },
     }),
     AuthModule,

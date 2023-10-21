@@ -19,7 +19,7 @@ export class UsersController {
   }
 
   @MessagePattern(AuthMS.FIND_ONE_BY_ID_MESSAGE)
-  findOneById(@Payload() _id: string) {
+  async findOneById(@Payload() _id: string) {
     this.usersService.findOneById(_id);
   }
 

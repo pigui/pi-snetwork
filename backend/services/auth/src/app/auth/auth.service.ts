@@ -143,15 +143,14 @@ export class AuthService {
     );
   }
 
-  async verifyToken(accessToken: string): Promise<ActiveUserData> {
+  async verifyToken(accessToken: string): Promise<UserDocument> {
     try {
       const payload: ActiveUserData =
         await this.jwtService.verifyAsync<ActiveUserData>(
           accessToken,
           this.jwtConfiguration
         );
-
-      return payload;
+      return this.usersService.findOneById(payload.sub);
     } catch (e) {
       throw new RpcException(new UnauthorizedException());
     }

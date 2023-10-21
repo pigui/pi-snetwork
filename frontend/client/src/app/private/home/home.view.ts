@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthFacade } from '@frontend/services';
 
 @Component({
   selector: 'app-home',
@@ -14,4 +16,6 @@ import { CommonModule } from '@angular/common';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeView {}
+export class HomeView {
+  readonly authFacade: AuthFacade = inject(AuthFacade);
+}

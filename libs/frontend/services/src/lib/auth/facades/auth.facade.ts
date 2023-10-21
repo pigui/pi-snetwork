@@ -7,6 +7,7 @@ import * as fromSelectors from '../selectors/auth.selectors';
 import {
   CreateUserInput,
   LoginWithPasswordInput,
+  RefreshTokensInput,
   User,
 } from '@frontend/graphql';
 import { Observable, map } from 'rxjs';
@@ -46,6 +47,14 @@ export class AuthFacade {
     fromSelectors.getRefreshToken
   );
 
+  readonly refreshTokensSuccess$ = this.actions$.pipe(
+    ofType(fromActions.AuthActions.refreshTokensSuccess)
+  );
+
+  readonly refreshTokensFail$ = this.actions$.pipe(
+    ofType(fromActions.AuthActions.refreshTokensFail)
+  );
+
   loginWithPassword(loginWithPasswordInput: LoginWithPasswordInput): void {
     this.store.dispatch(
       fromActions.AuthActions.loginWithPassword({
@@ -57,6 +66,12 @@ export class AuthFacade {
   createUser(createUserInput: CreateUserInput): void {
     this.store.dispatch(
       fromActions.AuthActions.register({ request: createUserInput })
+    );
+  }
+
+  refreshTokens(refreshTokensInput: RefreshTokensInput): void {
+    this.store.dispatch(
+      fromActions.AuthActions.refreshTokens({ request: refreshTokensInput })
     );
   }
 }

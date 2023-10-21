@@ -12,11 +12,6 @@ import { FastifyRequest } from 'fastify';
 import { REQUEST_USER_KEY } from '../constants';
 import { User } from '../dto';
 
-interface PayloadData {
-  sub: string;
-  email: string;
-}
-
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
@@ -31,29 +26,21 @@ export class AccessTokenGuard implements CanActivate {
       if (!accessToken) {
         return false;
       }
-      const { sub }: PayloadData = await lastValueFrom(
-        this.client.send<PayloadData>(AuthMS.VALIDATE_TOKEN, accessToken)
+      const user: User = await lastValueFrom(
+        this.client.send<User>(AuthMS.VALIDATE_TOKEN, accessToken)
       );
-      if (!sub) {
+      if (!user) {
         return false;
       }
-
-      const payload: User = await lastValueFrom(
-        this.client.send<User>(AuthMS.FIND_ONE_BY_ID_MESSAGE, sub)
-      );
-
-      if (payload) {
-        ctx.getContext().req[REQUEST_USER_KEY] = payload;
-        return true;
-      }
-      return false;
+      ctx.getContext().req[REQUEST_USER_KEY] = user;
+      return true;
     } catch (e) {
       return false;
     }
   }
 
   private getTokenFromHeader(req: FastifyRequest): string {
-    const [_, token] = req?.headers?.authorization?.split(' ') ?? [];
-    return token;
+    const [type, token] = req?.headers?.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

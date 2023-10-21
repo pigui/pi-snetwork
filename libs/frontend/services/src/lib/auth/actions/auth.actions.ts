@@ -3,6 +3,8 @@ import {
   CreateUserMutation,
   LoginWithPasswordInput,
   LoginWithPasswordMutation,
+  RefreshTokenMutation,
+  RefreshTokensInput,
 } from '@frontend/graphql';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -17,5 +19,8 @@ export const AuthActions = createActionGroup({
     Register: props<{ request: CreateUserInput }>(),
     'Register Success': props<{ response: CreateUserMutation }>(),
     'Register Fail': emptyProps(),
+    'Refresh Tokens': props<{ request: RefreshTokensInput }>(),
+    'Refresh Tokens Success': props<{ response: RefreshTokenMutation }>(),
+    'Refresh Tokens Fail': emptyProps(),
   },
 });

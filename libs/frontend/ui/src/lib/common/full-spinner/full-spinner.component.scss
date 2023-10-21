@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.full-spinner {
+  &__wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    @apply bg-cyan-600 text-white opacity-40;
+    &__spinner {
+    }
+  }
+}

@@ -43,6 +43,7 @@ type Query {
   findUsers: [User]
   findUserById(findUserByIdInput: FindUserByIdInput!): User
   findUserByEmail(findUserByEmailInput: FindUserByEmailInput!): User
+  currentUser: User!
 }
 
 type Mutation {

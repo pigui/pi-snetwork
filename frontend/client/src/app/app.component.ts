@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { HttpLink } from 'apollo-angular/http';
@@ -6,17 +6,19 @@ import { Apollo } from 'apollo-angular';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { InMemoryCache, split } from '@apollo/client/core';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { FullSpinnerComponent } from '@frontend/ui';
+import { UiFacade } from '@frontend/services';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
+  imports: [NxWelcomeComponent, RouterModule, FullSpinnerComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
-  title = 'client';
+  readonly uiFacade: UiFacade = inject(UiFacade);
   constructor(httpLink: HttpLink, apollo: Apollo) {
     const http = httpLink.create({
       uri: 'http://localhost:3000/graphql',

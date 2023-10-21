@@ -8,19 +8,34 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { appRoutes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 import { ApolloModule } from 'apollo-angular';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AuthEffects, AuthFacade, authFeature } from '@frontend/services';
+import {
+  AuthEffects,
+  AuthFacade,
+  UiEffects,
+  UiFacade,
+  authFeature,
+  uiFeature,
+} from '@frontend/services';
 import { ApolloAngularSDK } from '@frontend/graphql';
+import { httpInterceptor } from './interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([httpInterceptor])
+    ),
     importProvidersFrom(ApolloModule),
     importProvidersFrom(
       StoreModule.forRoot(),
@@ -29,9 +44,11 @@ export const appConfig: ApplicationConfig = {
         logOnly: !isDevMode(),
       }),
       StoreModule.forFeature(authFeature),
-      EffectsModule.forFeature(AuthEffects)
+      StoreModule.forFeature(uiFeature),
+      EffectsModule.forFeature(AuthEffects, UiEffects)
     ),
     ApolloAngularSDK,
     AuthFacade,
+    UiFacade,
   ],
 };

@@ -1,7 +1,7 @@
-import { Auth } from './auth.facade';
+import { AuthFacade } from './auth.facade';
 
 describe('Auth', () => {
   it('should create an instance', () => {
-    expect(new Auth()).toBeTruthy();
+    expect(new AuthFacade()).toBeTruthy();
   });
 });

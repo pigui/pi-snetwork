@@ -51,6 +51,7 @@ export interface IQuery {
     findUsers(): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
     findUserById(findUserByIdInput: FindUserByIdInput): Nullable<User> | Promise<Nullable<User>>;
     findUserByEmail(findUserByEmailInput: FindUserByEmailInput): Nullable<User> | Promise<Nullable<User>>;
+    currentUser(): User | Promise<User>;
 }
 
 export interface IMutation {
