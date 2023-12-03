@@ -1,4 +1,4 @@
-<div *ngIf="isLoading" class="full-spinner__wrapper">
-  <span class="full-spinner__wrapper__spinner"></span>
-</div>
+@if(isLoading){
+<span class="full-spinner__wrapper__spinner"></span>
+}
 <ng-content></ng-content>

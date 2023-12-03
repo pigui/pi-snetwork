@@ -17,12 +17,14 @@ import { UiActions } from '../../ui/actions/ui.actions';
 
 const START_LOADING = [
   AuthActions.loginWithPassword,
+  AuthActions.register,
   AuthActions.refreshTokens,
 ];
 const STOP_LOADING = [
   AuthActions.loginWithPasswordFail,
   AuthActions.registerFail,
   AuthActions.loginWithPasswordSuccess,
+  AuthActions.registerSuccess,
   AuthActions.refreshTokensFail,
   AuthActions.refreshTokensSuccess,
 ];
