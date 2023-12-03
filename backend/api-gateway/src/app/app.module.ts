@@ -10,6 +10,8 @@ import { CqrsModule } from '@backend/cqrs';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@backend/config';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { PostsModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
       },
     }),
     AuthModule,
+    PostsModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [

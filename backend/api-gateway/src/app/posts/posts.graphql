@@ -1,0 +1,37 @@
+scalar Date
+
+type Post {
+  _id: ID!
+  user: User
+  text: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+input FindPostByIdInput {
+  _id: ID!
+}
+
+input CreatePostInput {
+  text: String!
+}
+
+input DeletePostInput {
+  _id: ID!
+}
+
+input UpdatePostInput {
+  _id: ID!
+  text: String!
+}
+
+type Query {
+  findPosts: [Post]
+  findPostById(findPostByIdInput: FindPostByIdInput!): Post
+  findMyPost: [Post]
+}
+
+type Mutation {
+  createPost(createPostInput: CreatePostInput!): Post
+  deletePost(deletePostInput: DeletePostInput!): Post
+  updatePost(updatePostInput: UpdatePostInput!): Post
+}

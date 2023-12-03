@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { CqrsModule } from '@backend/cqrs';
-import { QUERY_HANDLERS } from './cqrs/query/handlers';
+import { QUERY_HANDLERS } from './cqrs/queries/handlers';
 import { COMMAND_HANDLERS } from './cqrs/commands/handlers';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthMS } from '@backend/microservices';

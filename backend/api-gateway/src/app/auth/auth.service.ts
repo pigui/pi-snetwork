@@ -4,7 +4,7 @@ import {
   GetUserByEmailQuery,
   GetUserByIdQuery,
   GetUsersQuery,
-} from './cqrs/query/impl';
+} from './cqrs/queries/impl';
 import {
   AccessToken,
   CreateUserInput,
